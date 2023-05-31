@@ -1,0 +1,1715 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>naniar R Package</title>
+    <meta charset="utf-8" />
+    <script src="libs/header-attrs-2.21/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/hygge.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# naniar R Package
+]
+.subtitle[
+## Exploring Missing Data Analysis with naniar
+]
+.author[
+### <p>S.D.A.V.S.Premathilake - S/18/SP/608
+Faculty of Science, University of Peradeniya</p>
+]
+
+---
+
+
+
+
+
+
+
+##What are Missing Data
+
+--
+
+####Missing data refers to the absence of values or information in a dataset.
+
+--
+
+###Challenges of missing data:
+
+--
+
+- Missing data is a common issue in real-world datasets.
+
+--
+
+- Missing data can lead to biased results and inaccurate analysis
+
+--
+
+- Lead to reduced statistical power
+
+--
+
+- Can result in the loss of valuable information
+
+--
+
+###Importance of understanding and handling missing values:
+
+--
+
+- Accurate data analysis requires addressing missing values appropriately.
+
+--
+
+- Proper handling ensures valid insights and informed decision-making.
+
+--
+
+`naniar` package is a powerful tool for missing data analysis in R.
+
+---
+class: inverse, middle, center
+
+
+# "naniar" Package
+
+##An overview
+
+---
+
+###What the "naniar" package does:
+
+--
+
+"naniar" is an R package specifically designed for handling and visualizing missing data.
+
+--
+
+It offers a comprehensive set of functions and tools tailored for missing data analysis.
+
+--
+
+###Key features:
+
+--
+
+- Missing data visualization: "naniar" provides functions for visualizing missing data patterns and mechanisms.
+
+--
+
+- Data imputation: The package offers various techniques for imputing missing values in datasets.
+
+--
+
+- Compatibility with tidyverse: "naniar" integrates seamlessly with other tidyverse packages, facilitating a tidy workflow.
+
+--
+
+###Benefits of using "naniar" for missing data analysis:
+
+--
+
+- Efficient workflow: "naniar" streamlines the process of exploring and handling missing values in datasets.
+   
+--
+
+- Enhanced insights: Visualizations provided by "naniar" help understand missing data patterns and inform decision-making.
+
+--
+
+- Comprehensive toolbox: The package offers a range of functions for data imputation and missing data assessment.
+
+
+---
+class: inverse, middle, center
+
+
+# Work with "naniar"
+
+###Installation and load naniar Package
+
+---
+
+###Installation
+
+We can use simply install 'naniar' package using `install.packages("naniar")`
+
+###Load 'naniar' Package
+
+After installing the 'naniar' Package we can load it to the R workspace using `library(naniar)`
+
+
+---
+
+count: false
+ 
+###Demonstrate using 'airquality' dataset
+.panel1-nan-auto[
+
+```r
+*data(airquality)
+```
+]
+ 
+.panel2-nan-auto[
+
+]
+
+---
+count: false
+ 
+###Demonstrate using 'airquality' dataset
+.panel1-nan-auto[
+
+```r
+data(airquality)
+*head(airquality, n = 15)
+```
+]
+ 
+.panel2-nan-auto[
+
+```
+   Ozone Solar.R Wind Temp Month Day
+1     41     190  7.4   67     5   1
+2     36     118  8.0   72     5   2
+3     12     149 12.6   74     5   3
+4     18     313 11.5   62     5   4
+5     NA      NA 14.3   56     5   5
+6     28      NA 14.9   66     5   6
+7     23     299  8.6   65     5   7
+8     19      99 13.8   59     5   8
+9      8      19 20.1   61     5   9
+10    NA     194  8.6   69     5  10
+11     7      NA  6.9   74     5  11
+12    16     256  9.7   69     5  12
+13    11     290  9.2   66     5  13
+14    14     274 10.9   68     5  14
+15    18      65 13.2   58     5  15
+```
+]
+
+---
+count: false
+ 
+###Demonstrate using 'airquality' dataset
+.panel1-nan-auto[
+
+```r
+data(airquality)
+head(airquality, n = 15)
+*summary(airquality)
+```
+]
+ 
+.panel2-nan-auto[
+
+```
+   Ozone Solar.R Wind Temp Month Day
+1     41     190  7.4   67     5   1
+2     36     118  8.0   72     5   2
+3     12     149 12.6   74     5   3
+4     18     313 11.5   62     5   4
+5     NA      NA 14.3   56     5   5
+6     28      NA 14.9   66     5   6
+7     23     299  8.6   65     5   7
+8     19      99 13.8   59     5   8
+9      8      19 20.1   61     5   9
+10    NA     194  8.6   69     5  10
+11     7      NA  6.9   74     5  11
+12    16     256  9.7   69     5  12
+13    11     290  9.2   66     5  13
+14    14     274 10.9   68     5  14
+15    18      65 13.2   58     5  15
+```
+
+```
+     Ozone           Solar.R           Wind             Temp      
+ Min.   :  1.00   Min.   :  7.0   Min.   : 1.700   Min.   :56.00  
+ 1st Qu.: 18.00   1st Qu.:115.8   1st Qu.: 7.400   1st Qu.:72.00  
+ Median : 31.50   Median :205.0   Median : 9.700   Median :79.00  
+ Mean   : 42.13   Mean   :185.9   Mean   : 9.958   Mean   :77.88  
+ 3rd Qu.: 63.25   3rd Qu.:258.8   3rd Qu.:11.500   3rd Qu.:85.00  
+ Max.   :168.00   Max.   :334.0   Max.   :20.700   Max.   :97.00  
+ NA's   :37       NA's   :7                                       
+     Month            Day      
+ Min.   :5.000   Min.   : 1.0  
+ 1st Qu.:6.000   1st Qu.: 8.0  
+ Median :7.000   Median :16.0  
+ Mean   :6.993   Mean   :15.8  
+ 3rd Qu.:8.000   3rd Qu.:23.0  
+ Max.   :9.000   Max.   :31.0  
+                               
+```
+]
+
+&lt;style&gt;
+.panel1-nan-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-nan-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-nan-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+---
+class: inverse, middle, center
+
+
+# Visualize Missing Data using "naniar"
+
+###vis_miss(data)
+
+---
+
+###Visualize Missing Data
+
+--
+
+`vis_miss()` will generate a missingness matrix plot showing missing data patterns in the dataset.
+
+--
+
+- The vis_miss() function generates a plot where each row represents an observation (row) in the dataset, and each column represents a variable (column)
+
+--
+
+- Missing values are denoted by empty cells, while non-missing values are represented by filled cells
+
+--
+
+- The plot may have different color schemes to indicate missingness, making it easier to identify the extent and distribution of missing values
+
+--
+
+- The visualization allows us to quickly identify patterns or clusters of missingness, helping you understand the nature of missing data in your dataset
+
+
+---
+
+count: false
+ 
+
+.panel1-nan2-auto[
+
+```r
+*library(naniar)
+```
+]
+ 
+.panel2-nan2-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-nan2-auto[
+
+```r
+library(naniar)
+*data(airquality)
+```
+]
+ 
+.panel2-nan2-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-nan2-auto[
+
+```r
+library(naniar)
+data(airquality)
+
+*vis_miss(airquality)
+```
+]
+ 
+.panel2-nan2-auto[
+![](narnia_files/figure-html/nan2_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-nan2-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-nan2-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-nan2-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+---
+class: inverse, middle, center
+
+
+#Exploring missingness relationships using "naniar"
+
+###with 'ggplot2'
+
+---
+
+count: false
+ 
+Consider following example. This will show an error message ' Warning message: Removed 42 rows containing missing values (geom_point()) ' .All the rows containing missing values are removed here. The problem with this is that ggplot does not handle missings be default, and removes the missing values
+.panel1-plot1-auto[
+
+```r
+*library(ggplot2)
+```
+]
+ 
+.panel2-plot1-auto[
+
+]
+
+---
+count: false
+ 
+Consider following example. This will show an error message ' Warning message: Removed 42 rows containing missing values (geom_point()) ' .All the rows containing missing values are removed here. The problem with this is that ggplot does not handle missings be default, and removes the missing values
+.panel1-plot1-auto[
+
+```r
+library(ggplot2)
+*ggplot(airquality,
+*      aes(x = Solar.R,
+*          y = Ozone))
+```
+]
+ 
+.panel2-plot1-auto[
+![](narnia_files/figure-html/plot1_auto_02_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+Consider following example. This will show an error message ' Warning message: Removed 42 rows containing missing values (geom_point()) ' .All the rows containing missing values are removed here. The problem with this is that ggplot does not handle missings be default, and removes the missing values
+.panel1-plot1-auto[
+
+```r
+library(ggplot2)
+ggplot(airquality,
+       aes(x = Solar.R,
+           y = Ozone)) +
+* geom_point()
+```
+]
+ 
+.panel2-plot1-auto[
+![](narnia_files/figure-html/plot1_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-plot1-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-plot1-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-plot1-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+---
+
+count: false
+ 
+To solve that issue, here we illustrate by exploring the relationship between Ozone and Solar radiation from the airquality dataset with the 'geom_miss_point()' function using 'naniar'. It provides a visual representation of missingness in the plot for better understanding and analysis
+.panel1-plot2-auto[
+
+```r
+*library(ggplot2)
+```
+]
+ 
+.panel2-plot2-auto[
+
+]
+
+---
+count: false
+ 
+To solve that issue, here we illustrate by exploring the relationship between Ozone and Solar radiation from the airquality dataset with the 'geom_miss_point()' function using 'naniar'. It provides a visual representation of missingness in the plot for better understanding and analysis
+.panel1-plot2-auto[
+
+```r
+library(ggplot2)
+*library(naniar)
+```
+]
+ 
+.panel2-plot2-auto[
+
+]
+
+---
+count: false
+ 
+To solve that issue, here we illustrate by exploring the relationship between Ozone and Solar radiation from the airquality dataset with the 'geom_miss_point()' function using 'naniar'. It provides a visual representation of missingness in the plot for better understanding and analysis
+.panel1-plot2-auto[
+
+```r
+library(ggplot2)
+library(naniar)
+
+*ggplot(airquality,
+*      aes(x = Solar.R,
+*          y = Ozone))
+```
+]
+ 
+.panel2-plot2-auto[
+![](narnia_files/figure-html/plot2_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+To solve that issue, here we illustrate by exploring the relationship between Ozone and Solar radiation from the airquality dataset with the 'geom_miss_point()' function using 'naniar'. It provides a visual representation of missingness in the plot for better understanding and analysis
+.panel1-plot2-auto[
+
+```r
+library(ggplot2)
+library(naniar)
+
+ggplot(airquality,
+       aes(x = Solar.R,
+           y = Ozone)) +
+* geom_miss_point()
+```
+]
+ 
+.panel2-plot2-auto[
+![](narnia_files/figure-html/plot2_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-plot2-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-plot2-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-plot2-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+class: inverse, middle, center
+
+
+#Calculate missingness statistics using "naniar"
+
+###miss_var_summary(data)
+
+---
+
+###Calculate missingness statistics
+
+--
+
+`miss_var_summary()` will provide a summary of missingness statistics for each variable in the dataset
+
+--
+
+- The `miss_var_summary()` function returns a summary table with statistics for each variable in the dataset
+
+--
+
+- The summary table includes the variable name, the total number of observations (rows), the number of missing values, the percentage of missing values, and the number of unique values (excluding missing values)
+
+--
+
+- The statistics help you understand the missingness patterns for each variable, providing insights into the completeness of the data and the prevalence of missing values
+
+---
+
+count: false
+ 
+
+.panel1-nan3-auto[
+
+```r
+*miss_summary &lt;- miss_var_summary(airquality)
+```
+]
+ 
+.panel2-nan3-auto[
+
+]
+
+---
+count: false
+ 
+
+.panel1-nan3-auto[
+
+```r
+miss_summary &lt;- miss_var_summary(airquality)
+*miss_summary
+```
+]
+ 
+.panel2-nan3-auto[
+
+```
+# A tibble: 6 × 3
+  variable n_miss pct_miss
+  &lt;chr&gt;     &lt;int&gt;    &lt;dbl&gt;
+1 Ozone        37    24.2 
+2 Solar.R       7     4.58
+3 Wind          0     0   
+4 Temp          0     0   
+5 Month         0     0   
+6 Day           0     0   
+```
+]
+
+&lt;style&gt;
+.panel1-nan3-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-nan3-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-nan3-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+class: inverse, middle, center
+
+
+#Handle missing data with 'naniar'
+
+###- Complete cases
+
+###- Imputations
+
+---
+
+###Complete cases: 
+
+--
+
+- Remove observations with any missing values.
+
+--
+
+- This can be done using `complete.cases()`
+
+---
+
+count: false
+ 
+
+.panel1-nan4-auto[
+
+```r
+#view airqiality dataset
+*head(airquality, n=15)
+```
+]
+ 
+.panel2-nan4-auto[
+
+```
+   Ozone Solar.R Wind Temp Month Day
+1     41     190  7.4   67     5   1
+2     36     118  8.0   72     5   2
+3     12     149 12.6   74     5   3
+4     18     313 11.5   62     5   4
+5     NA      NA 14.3   56     5   5
+6     28      NA 14.9   66     5   6
+7     23     299  8.6   65     5   7
+8     19      99 13.8   59     5   8
+9      8      19 20.1   61     5   9
+10    NA     194  8.6   69     5  10
+11     7      NA  6.9   74     5  11
+12    16     256  9.7   69     5  12
+13    11     290  9.2   66     5  13
+14    14     274 10.9   68     5  14
+15    18      65 13.2   58     5  15
+```
+]
+
+---
+count: false
+ 
+
+.panel1-nan4-auto[
+
+```r
+#view airqiality dataset
+head(airquality, n=15)
+
+*complete_cases_data &lt;- airquality[complete.cases(airquality), ]
+```
+]
+ 
+.panel2-nan4-auto[
+
+```
+   Ozone Solar.R Wind Temp Month Day
+1     41     190  7.4   67     5   1
+2     36     118  8.0   72     5   2
+3     12     149 12.6   74     5   3
+4     18     313 11.5   62     5   4
+5     NA      NA 14.3   56     5   5
+6     28      NA 14.9   66     5   6
+7     23     299  8.6   65     5   7
+8     19      99 13.8   59     5   8
+9      8      19 20.1   61     5   9
+10    NA     194  8.6   69     5  10
+11     7      NA  6.9   74     5  11
+12    16     256  9.7   69     5  12
+13    11     290  9.2   66     5  13
+14    14     274 10.9   68     5  14
+15    18      65 13.2   58     5  15
+```
+]
+
+---
+count: false
+ 
+
+.panel1-nan4-auto[
+
+```r
+#view airqiality dataset
+head(airquality, n=15)
+
+complete_cases_data &lt;- airquality[complete.cases(airquality), ]
+
+#view complete_cases airquality dataset
+*head(complete_cases_data, n=15)
+```
+]
+ 
+.panel2-nan4-auto[
+
+```
+   Ozone Solar.R Wind Temp Month Day
+1     41     190  7.4   67     5   1
+2     36     118  8.0   72     5   2
+3     12     149 12.6   74     5   3
+4     18     313 11.5   62     5   4
+5     NA      NA 14.3   56     5   5
+6     28      NA 14.9   66     5   6
+7     23     299  8.6   65     5   7
+8     19      99 13.8   59     5   8
+9      8      19 20.1   61     5   9
+10    NA     194  8.6   69     5  10
+11     7      NA  6.9   74     5  11
+12    16     256  9.7   69     5  12
+13    11     290  9.2   66     5  13
+14    14     274 10.9   68     5  14
+15    18      65 13.2   58     5  15
+```
+
+```
+   Ozone Solar.R Wind Temp Month Day
+1     41     190  7.4   67     5   1
+2     36     118  8.0   72     5   2
+3     12     149 12.6   74     5   3
+4     18     313 11.5   62     5   4
+7     23     299  8.6   65     5   7
+8     19      99 13.8   59     5   8
+9      8      19 20.1   61     5   9
+12    16     256  9.7   69     5  12
+13    11     290  9.2   66     5  13
+14    14     274 10.9   68     5  14
+15    18      65 13.2   58     5  15
+16    14     334 11.5   64     5  16
+17    34     307 12.0   66     5  17
+18     6      78 18.4   57     5  18
+19    30     322 11.5   68     5  19
+```
+]
+
+&lt;style&gt;
+.panel1-nan4-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-nan4-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-nan4-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+---
+
+###Imputations: 
+
+--
+
+Imputation refers to the process of filling in missing values in a dataset with estimated or plausible values
+
+--
+
+The goal of imputation is to create a complete dataset that can be used for further analysis or modeling
+
+--
+
+The "naniar" package in R provides various methods for data imputation
+
+--
+
+- Imputing with Mean:
+The `impute_mean()` function replaces missing values with the mean value of the corresponding variable.
+
+--
+
+- Imputing with Median:
+The `impute_median()` function replaces missing values with the median value of the corresponding variable
+
+
+---
+
+count: false
+ 
+Imputing with Mean: The 'impute_mean()' function replaces missing values with the mean value of the corresponding variable
+.panel1-nan5-auto[
+
+```r
+*library(naniar)
+```
+]
+ 
+.panel2-nan5-auto[
+
+]
+
+---
+count: false
+ 
+Imputing with Mean: The 'impute_mean()' function replaces missing values with the mean value of the corresponding variable
+.panel1-nan5-auto[
+
+```r
+library(naniar)
+*data(airquality)
+```
+]
+ 
+.panel2-nan5-auto[
+
+]
+
+---
+count: false
+ 
+Imputing with Mean: The 'impute_mean()' function replaces missing values with the mean value of the corresponding variable
+.panel1-nan5-auto[
+
+```r
+library(naniar)
+data(airquality)
+
+#view airqiality dataset
+*head(airquality, n=15)
+```
+]
+ 
+.panel2-nan5-auto[
+
+```
+   Ozone Solar.R Wind Temp Month Day
+1     41     190  7.4   67     5   1
+2     36     118  8.0   72     5   2
+3     12     149 12.6   74     5   3
+4     18     313 11.5   62     5   4
+5     NA      NA 14.3   56     5   5
+6     28      NA 14.9   66     5   6
+7     23     299  8.6   65     5   7
+8     19      99 13.8   59     5   8
+9      8      19 20.1   61     5   9
+10    NA     194  8.6   69     5  10
+11     7      NA  6.9   74     5  11
+12    16     256  9.7   69     5  12
+13    11     290  9.2   66     5  13
+14    14     274 10.9   68     5  14
+15    18      65 13.2   58     5  15
+```
+]
+
+---
+count: false
+ 
+Imputing with Mean: The 'impute_mean()' function replaces missing values with the mean value of the corresponding variable
+.panel1-nan5-auto[
+
+```r
+library(naniar)
+data(airquality)
+
+#view airqiality dataset
+head(airquality, n=15)
+
+# Impute missing values using the 'impute_mean' function
+*imputed_data &lt;- sapply(airquality, impute_mean)
+```
+]
+ 
+.panel2-nan5-auto[
+
+```
+   Ozone Solar.R Wind Temp Month Day
+1     41     190  7.4   67     5   1
+2     36     118  8.0   72     5   2
+3     12     149 12.6   74     5   3
+4     18     313 11.5   62     5   4
+5     NA      NA 14.3   56     5   5
+6     28      NA 14.9   66     5   6
+7     23     299  8.6   65     5   7
+8     19      99 13.8   59     5   8
+9      8      19 20.1   61     5   9
+10    NA     194  8.6   69     5  10
+11     7      NA  6.9   74     5  11
+12    16     256  9.7   69     5  12
+13    11     290  9.2   66     5  13
+14    14     274 10.9   68     5  14
+15    18      65 13.2   58     5  15
+```
+]
+
+---
+count: false
+ 
+Imputing with Mean: The 'impute_mean()' function replaces missing values with the mean value of the corresponding variable
+.panel1-nan5-auto[
+
+```r
+library(naniar)
+data(airquality)
+
+#view airqiality dataset
+head(airquality, n=15)
+
+# Impute missing values using the 'impute_mean' function
+imputed_data &lt;- sapply(airquality, impute_mean)
+
+# Convert the imputed_data back to a data frame
+*imputed_data &lt;- as.data.frame(imputed_data)
+```
+]
+ 
+.panel2-nan5-auto[
+
+```
+   Ozone Solar.R Wind Temp Month Day
+1     41     190  7.4   67     5   1
+2     36     118  8.0   72     5   2
+3     12     149 12.6   74     5   3
+4     18     313 11.5   62     5   4
+5     NA      NA 14.3   56     5   5
+6     28      NA 14.9   66     5   6
+7     23     299  8.6   65     5   7
+8     19      99 13.8   59     5   8
+9      8      19 20.1   61     5   9
+10    NA     194  8.6   69     5  10
+11     7      NA  6.9   74     5  11
+12    16     256  9.7   69     5  12
+13    11     290  9.2   66     5  13
+14    14     274 10.9   68     5  14
+15    18      65 13.2   58     5  15
+```
+]
+
+---
+count: false
+ 
+Imputing with Mean: The 'impute_mean()' function replaces missing values with the mean value of the corresponding variable
+.panel1-nan5-auto[
+
+```r
+library(naniar)
+data(airquality)
+
+#view airqiality dataset
+head(airquality, n=15)
+
+# Impute missing values using the 'impute_mean' function
+imputed_data &lt;- sapply(airquality, impute_mean)
+
+# Convert the imputed_data back to a data frame
+imputed_data &lt;- as.data.frame(imputed_data)
+
+# View the imputed airqiality dataset
+*head(imputed_data, n=15)
+```
+]
+ 
+.panel2-nan5-auto[
+
+```
+   Ozone Solar.R Wind Temp Month Day
+1     41     190  7.4   67     5   1
+2     36     118  8.0   72     5   2
+3     12     149 12.6   74     5   3
+4     18     313 11.5   62     5   4
+5     NA      NA 14.3   56     5   5
+6     28      NA 14.9   66     5   6
+7     23     299  8.6   65     5   7
+8     19      99 13.8   59     5   8
+9      8      19 20.1   61     5   9
+10    NA     194  8.6   69     5  10
+11     7      NA  6.9   74     5  11
+12    16     256  9.7   69     5  12
+13    11     290  9.2   66     5  13
+14    14     274 10.9   68     5  14
+15    18      65 13.2   58     5  15
+```
+
+```
+      Ozone  Solar.R Wind Temp Month Day
+1  41.00000 190.0000  7.4   67     5   1
+2  36.00000 118.0000  8.0   72     5   2
+3  12.00000 149.0000 12.6   74     5   3
+4  18.00000 313.0000 11.5   62     5   4
+5  42.12931 185.9315 14.3   56     5   5
+6  28.00000 185.9315 14.9   66     5   6
+7  23.00000 299.0000  8.6   65     5   7
+8  19.00000  99.0000 13.8   59     5   8
+9   8.00000  19.0000 20.1   61     5   9
+10 42.12931 194.0000  8.6   69     5  10
+11  7.00000 185.9315  6.9   74     5  11
+12 16.00000 256.0000  9.7   69     5  12
+13 11.00000 290.0000  9.2   66     5  13
+14 14.00000 274.0000 10.9   68     5  14
+15 18.00000  65.0000 13.2   58     5  15
+```
+]
+
+---
+count: false
+ 
+Imputing with Mean: The 'impute_mean()' function replaces missing values with the mean value of the corresponding variable
+.panel1-nan5-auto[
+
+```r
+library(naniar)
+data(airquality)
+
+#view airqiality dataset
+head(airquality, n=15)
+
+# Impute missing values using the 'impute_mean' function
+imputed_data &lt;- sapply(airquality, impute_mean)
+
+# Convert the imputed_data back to a data frame
+imputed_data &lt;- as.data.frame(imputed_data)
+
+# View the imputed airqiality dataset
+head(imputed_data, n=15)
+```
+]
+ 
+.panel2-nan5-auto[
+
+```
+   Ozone Solar.R Wind Temp Month Day
+1     41     190  7.4   67     5   1
+2     36     118  8.0   72     5   2
+3     12     149 12.6   74     5   3
+4     18     313 11.5   62     5   4
+5     NA      NA 14.3   56     5   5
+6     28      NA 14.9   66     5   6
+7     23     299  8.6   65     5   7
+8     19      99 13.8   59     5   8
+9      8      19 20.1   61     5   9
+10    NA     194  8.6   69     5  10
+11     7      NA  6.9   74     5  11
+12    16     256  9.7   69     5  12
+13    11     290  9.2   66     5  13
+14    14     274 10.9   68     5  14
+15    18      65 13.2   58     5  15
+```
+
+```
+      Ozone  Solar.R Wind Temp Month Day
+1  41.00000 190.0000  7.4   67     5   1
+2  36.00000 118.0000  8.0   72     5   2
+3  12.00000 149.0000 12.6   74     5   3
+4  18.00000 313.0000 11.5   62     5   4
+5  42.12931 185.9315 14.3   56     5   5
+6  28.00000 185.9315 14.9   66     5   6
+7  23.00000 299.0000  8.6   65     5   7
+8  19.00000  99.0000 13.8   59     5   8
+9   8.00000  19.0000 20.1   61     5   9
+10 42.12931 194.0000  8.6   69     5  10
+11  7.00000 185.9315  6.9   74     5  11
+12 16.00000 256.0000  9.7   69     5  12
+13 11.00000 290.0000  9.2   66     5  13
+14 14.00000 274.0000 10.9   68     5  14
+15 18.00000  65.0000 13.2   58     5  15
+```
+]
+
+&lt;style&gt;
+.panel1-nan5-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-nan5-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-nan5-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+---
+
+count: false
+ 
+Imputing with Median: The 'impute_median()' function replaces missing values with the median value of the corresponding variable
+.panel1-nan6-auto[
+
+```r
+*library(naniar)
+```
+]
+ 
+.panel2-nan6-auto[
+
+]
+
+---
+count: false
+ 
+Imputing with Median: The 'impute_median()' function replaces missing values with the median value of the corresponding variable
+.panel1-nan6-auto[
+
+```r
+library(naniar)
+*data(airquality)
+```
+]
+ 
+.panel2-nan6-auto[
+
+]
+
+---
+count: false
+ 
+Imputing with Median: The 'impute_median()' function replaces missing values with the median value of the corresponding variable
+.panel1-nan6-auto[
+
+```r
+library(naniar)
+data(airquality)
+
+#view airqiality dataset
+*head(airquality, n=15)
+```
+]
+ 
+.panel2-nan6-auto[
+
+```
+   Ozone Solar.R Wind Temp Month Day
+1     41     190  7.4   67     5   1
+2     36     118  8.0   72     5   2
+3     12     149 12.6   74     5   3
+4     18     313 11.5   62     5   4
+5     NA      NA 14.3   56     5   5
+6     28      NA 14.9   66     5   6
+7     23     299  8.6   65     5   7
+8     19      99 13.8   59     5   8
+9      8      19 20.1   61     5   9
+10    NA     194  8.6   69     5  10
+11     7      NA  6.9   74     5  11
+12    16     256  9.7   69     5  12
+13    11     290  9.2   66     5  13
+14    14     274 10.9   68     5  14
+15    18      65 13.2   58     5  15
+```
+]
+
+---
+count: false
+ 
+Imputing with Median: The 'impute_median()' function replaces missing values with the median value of the corresponding variable
+.panel1-nan6-auto[
+
+```r
+library(naniar)
+data(airquality)
+
+#view airqiality dataset
+head(airquality, n=15)
+
+# Impute missing values using the 'impute_median' function
+*imputed_data &lt;- sapply(airquality, impute_median)
+```
+]
+ 
+.panel2-nan6-auto[
+
+```
+   Ozone Solar.R Wind Temp Month Day
+1     41     190  7.4   67     5   1
+2     36     118  8.0   72     5   2
+3     12     149 12.6   74     5   3
+4     18     313 11.5   62     5   4
+5     NA      NA 14.3   56     5   5
+6     28      NA 14.9   66     5   6
+7     23     299  8.6   65     5   7
+8     19      99 13.8   59     5   8
+9      8      19 20.1   61     5   9
+10    NA     194  8.6   69     5  10
+11     7      NA  6.9   74     5  11
+12    16     256  9.7   69     5  12
+13    11     290  9.2   66     5  13
+14    14     274 10.9   68     5  14
+15    18      65 13.2   58     5  15
+```
+]
+
+---
+count: false
+ 
+Imputing with Median: The 'impute_median()' function replaces missing values with the median value of the corresponding variable
+.panel1-nan6-auto[
+
+```r
+library(naniar)
+data(airquality)
+
+#view airqiality dataset
+head(airquality, n=15)
+
+# Impute missing values using the 'impute_median' function
+imputed_data &lt;- sapply(airquality, impute_median)
+
+# Convert the imputed_data back to a data frame
+*imputed_data &lt;- as.data.frame(imputed_data)
+```
+]
+ 
+.panel2-nan6-auto[
+
+```
+   Ozone Solar.R Wind Temp Month Day
+1     41     190  7.4   67     5   1
+2     36     118  8.0   72     5   2
+3     12     149 12.6   74     5   3
+4     18     313 11.5   62     5   4
+5     NA      NA 14.3   56     5   5
+6     28      NA 14.9   66     5   6
+7     23     299  8.6   65     5   7
+8     19      99 13.8   59     5   8
+9      8      19 20.1   61     5   9
+10    NA     194  8.6   69     5  10
+11     7      NA  6.9   74     5  11
+12    16     256  9.7   69     5  12
+13    11     290  9.2   66     5  13
+14    14     274 10.9   68     5  14
+15    18      65 13.2   58     5  15
+```
+]
+
+---
+count: false
+ 
+Imputing with Median: The 'impute_median()' function replaces missing values with the median value of the corresponding variable
+.panel1-nan6-auto[
+
+```r
+library(naniar)
+data(airquality)
+
+#view airqiality dataset
+head(airquality, n=15)
+
+# Impute missing values using the 'impute_median' function
+imputed_data &lt;- sapply(airquality, impute_median)
+
+# Convert the imputed_data back to a data frame
+imputed_data &lt;- as.data.frame(imputed_data)
+
+# View the imputed airqiality dataset
+*head(imputed_data, n = 15)
+```
+]
+ 
+.panel2-nan6-auto[
+
+```
+   Ozone Solar.R Wind Temp Month Day
+1     41     190  7.4   67     5   1
+2     36     118  8.0   72     5   2
+3     12     149 12.6   74     5   3
+4     18     313 11.5   62     5   4
+5     NA      NA 14.3   56     5   5
+6     28      NA 14.9   66     5   6
+7     23     299  8.6   65     5   7
+8     19      99 13.8   59     5   8
+9      8      19 20.1   61     5   9
+10    NA     194  8.6   69     5  10
+11     7      NA  6.9   74     5  11
+12    16     256  9.7   69     5  12
+13    11     290  9.2   66     5  13
+14    14     274 10.9   68     5  14
+15    18      65 13.2   58     5  15
+```
+
+```
+   Ozone Solar.R Wind Temp Month Day
+1   41.0     190  7.4   67     5   1
+2   36.0     118  8.0   72     5   2
+3   12.0     149 12.6   74     5   3
+4   18.0     313 11.5   62     5   4
+5   31.5     205 14.3   56     5   5
+6   28.0     205 14.9   66     5   6
+7   23.0     299  8.6   65     5   7
+8   19.0      99 13.8   59     5   8
+9    8.0      19 20.1   61     5   9
+10  31.5     194  8.6   69     5  10
+11   7.0     205  6.9   74     5  11
+12  16.0     256  9.7   69     5  12
+13  11.0     290  9.2   66     5  13
+14  14.0     274 10.9   68     5  14
+15  18.0      65 13.2   58     5  15
+```
+]
+
+---
+count: false
+ 
+Imputing with Median: The 'impute_median()' function replaces missing values with the median value of the corresponding variable
+.panel1-nan6-auto[
+
+```r
+library(naniar)
+data(airquality)
+
+#view airqiality dataset
+head(airquality, n=15)
+
+# Impute missing values using the 'impute_median' function
+imputed_data &lt;- sapply(airquality, impute_median)
+
+# Convert the imputed_data back to a data frame
+imputed_data &lt;- as.data.frame(imputed_data)
+
+# View the imputed airqiality dataset
+head(imputed_data, n = 15)
+```
+]
+ 
+.panel2-nan6-auto[
+
+```
+   Ozone Solar.R Wind Temp Month Day
+1     41     190  7.4   67     5   1
+2     36     118  8.0   72     5   2
+3     12     149 12.6   74     5   3
+4     18     313 11.5   62     5   4
+5     NA      NA 14.3   56     5   5
+6     28      NA 14.9   66     5   6
+7     23     299  8.6   65     5   7
+8     19      99 13.8   59     5   8
+9      8      19 20.1   61     5   9
+10    NA     194  8.6   69     5  10
+11     7      NA  6.9   74     5  11
+12    16     256  9.7   69     5  12
+13    11     290  9.2   66     5  13
+14    14     274 10.9   68     5  14
+15    18      65 13.2   58     5  15
+```
+
+```
+   Ozone Solar.R Wind Temp Month Day
+1   41.0     190  7.4   67     5   1
+2   36.0     118  8.0   72     5   2
+3   12.0     149 12.6   74     5   3
+4   18.0     313 11.5   62     5   4
+5   31.5     205 14.3   56     5   5
+6   28.0     205 14.9   66     5   6
+7   23.0     299  8.6   65     5   7
+8   19.0      99 13.8   59     5   8
+9    8.0      19 20.1   61     5   9
+10  31.5     194  8.6   69     5  10
+11   7.0     205  6.9   74     5  11
+12  16.0     256  9.7   69     5  12
+13  11.0     290  9.2   66     5  13
+14  14.0     274 10.9   68     5  14
+15  18.0      65 13.2   58     5  15
+```
+]
+
+&lt;style&gt;
+.panel1-nan6-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-nan6-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-nan6-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+---
+
+# References
+
+--
+
+- https://cran.r-project.org/web/packages/naniar/vignettes/getting-started-w-naniar.html
+
+--
+
+- http://naniar.njtierney.com/articles/exploring-imputed-values.html
+
+--
+
+
+&lt;!-- adjust font size in this css code chunk, currently 80 --&gt;
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 80%}
+
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+
+code.r.hljs.remark-code{
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+code.r.hljs.remark-code:hover{
+  overflow-x:visible;
+  width: 500px;
+  border-style: solid;
+}
+&lt;/style&gt;
+
+
+---
+class: inverse, center, middle
+
+
+# Thank you!
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
